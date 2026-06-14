@@ -22,7 +22,7 @@ _SOURCES_DIR = GENERATED_DIR / ".sources"
 def build_dest(formato: str, nombre: str) -> Path:
     """Return a unique, sanitized destination path inside GENERATED_DIR."""
     fmt = formato.lower().strip()
-    safe_name = re.sub(r"[^\w\-]", "_", nombre) or "documento"
+    safe_name = re.sub(r"[^\w\-]", "_", nombre) or "document"
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
     GENERATED_DIR.mkdir(parents=True, exist_ok=True)
     return GENERATED_DIR / f"{safe_name}_{timestamp}.{fmt}"
@@ -38,7 +38,7 @@ def save_source_sidecar(filename: str, source: str) -> None:
     try:
         (_sources_dir() / f"{filename}.source.md").write_text(source, encoding="utf-8")
     except Exception:  # pragma: no cover - sidecar is best-effort
-        logger.warning("No se pudo guardar el sidecar de fuente para %s", filename)
+        logger.warning("Could not save the source sidecar for %s", filename)
 
 
 def _resolve_generated(nombre: str) -> Path | None:
@@ -70,8 +70,8 @@ def read_generated(nombre: str) -> str:
     target = _resolve_generated(nombre)
     if target is None:
         return (
-            f"No se encontro ningun documento generado llamado '{nombre}'. "
-            "Verifica el nombre exacto del archivo."
+            f"No generated document named '{nombre}' was found. "
+            "Check the exact file name."
         )
 
     sidecar = _sources_dir() / f"{target.name}.source.md"
@@ -112,17 +112,17 @@ def read_generated(nombre: str) -> str:
             prs = Presentation(str(target))
             lines = []
             for i, slide in enumerate(prs.slides, 1):
-                lines.append(f"## Diapositiva {i}")
+                lines.append(f"## Slide {i}")
                 for shape in slide.shapes:
                     if shape.has_text_frame:
                         lines.append(shape.text_frame.text)
             return "\n".join(lines)
 
     except Exception as exc:  # pragma: no cover - extraction is best-effort
-        logger.exception("Error leyendo documento generado '%s': %s", target.name, exc)
+        logger.exception("Error reading generated document '%s': %s", target.name, exc)
         return (
-            f"No se pudo extraer el texto de '{target.name}' (formato {fmt}): {exc}. "
-            "Si necesitas modificarlo, regeneralo a partir del informe de investigacion."
+            f"Could not extract the text from '{target.name}' (format {fmt}): {exc}. "
+            "If you need to modify it, regenerate it from the source content."
         )
 
     return target.read_text(encoding="utf-8", errors="replace")

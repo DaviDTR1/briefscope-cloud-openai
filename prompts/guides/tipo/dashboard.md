@@ -1,27 +1,27 @@
-<!-- desc: Tablero de datos / cuadro de mando con métricas, tablas y gráficos a partir de los datos del proyecto (Excel o PDF visual). -->
-# Tipo: Dashboard / cuadro de datos
+<!-- desc: Data dashboard / control panel with metrics, tables and charts built from the project's data (Excel or visual PDF). -->
+# Type: Dashboard / data panel
 
-Vista de datos con métricas, tablas y gráficos. Dos opciones según el uso:
+Data view with metrics, tables and charts. Two options depending on use:
 
-- **XLSX** vía `generar_documento_codigo` (openpyxl) — si el usuario querrá filtrar, editar o seguir trabajando con los datos. Permite fórmulas, varias hojas y gráficos nativos de Excel.
-- **PDF** vía `generar_documento_codigo` (reportlab) — si es un informe visual de solo lectura con KPIs y gráficos posicionados.
+- **XLSX** via `generar_documento_codigo` (openpyxl) — if the user will want to filter, edit or keep working with the data. Allows formulas, multiple sheets and native Excel charts.
+- **PDF** via `generar_documento_codigo` (reportlab) — if it is a read-only visual report with KPIs and positioned charts.
 
-## Estructura recomendada
-1. **Cabecera** — título, periodo de los datos, fecha de generación.
-2. **KPIs principales** — 3-6 métricas clave destacadas (cifra grande + etiqueta + variación).
-3. **Tablas de detalle** — datos desglosados, con cabecera de color y totales.
-4. **Gráficos** — tendencias o comparativas (barras, líneas, pastel) según corresponda.
-5. **Notas / fuente de los datos**.
+## Recommended structure
+1. **Header** — title, data period, generation date.
+2. **Main KPIs** — 3-6 key metrics highlighted (big figure + label + variation).
+3. **Detail tables** — broken-down data, with a colored header and totals.
+4. **Charts** — trends or comparisons (bar, line, pie) as appropriate.
+5. **Notes / data source**.
 
-## Buenas prácticas
-- Extrae las cifras reales del proyecto con `buscar_en_documentos`; no inventes datos.
-- KPIs primero, detalle después (pirámide invertida).
-- En XLSX: cabeceras con relleno de color, `freeze_panes`, formato numérico (`#,##0`, `0%`) y **fórmulas reales** para los totales.
-- En XLSX puedes añadir gráficos con `openpyxl.chart` (BarChart, LineChart) referenciando rangos.
-- Paleta coherente y consistente con la marca si se conoce.
+## Best practices
+- Extract the real figures from the project with `buscar_en_documentos`; do not invent data.
+- KPIs first, detail after (inverted pyramid).
+- In XLSX: headers with colored fill, `freeze_panes`, number formatting (`#,##0`, `0%`) and **real formulas** for totals.
+- In XLSX you can add charts with `openpyxl.chart` (BarChart, LineChart) referencing ranges.
+- Coherent palette, consistent with the brand if known.
 
-## Errores a evitar
-- Volcar una tabla gigante sin resumen ni KPIs.
-- Colores hex con `#` en openpyxl (van sin `#`).
-- Calcular en Python lo que debería ser fórmula editable.
-- Gráficos sin títulos ni etiquetas de ejes.
+## Mistakes to avoid
+- Dumping a giant table with no summary or KPIs.
+- Hex colors with `#` in openpyxl (they go without `#`).
+- Computing in Python what should be an editable formula.
+- Charts with no titles or axis labels.

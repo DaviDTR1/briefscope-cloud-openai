@@ -1,19 +1,19 @@
-# Guía de formato: TXT (texto plano)
+# Format guide: TXT (plain text)
 
-Una sola vía: **`generar_documento_markdown`** con `formato: "txt"`.
+A single path: **`generar_documento_markdown`** with `formato: "txt"`.
 
-Escribe el contenido en **Markdown** y el motor lo reduce a texto plano legible (quita encabezados `#`, negritas, cursivas, enlaces, imágenes y bloques de código, conservando el texto).
+Write the content in **Markdown** and the engine reduces it to readable plain text (removes `#` headings, bold, italics, links, images and code blocks, keeping the text).
 
-Contrato:
+Contract:
 - `formato`: `"txt"`
-- `contenido_markdown`: el contenido. Puedes usar Markdown ligero; se limpiará.
-- `nombre_archivo`: sin extensión.
-- `estilo_css`: se ignora.
+- `contenido_markdown`: the content. You can use light Markdown; it will be cleaned up.
+- `nombre_archivo`: without extension.
+- `estilo_css`: ignored.
 
-Úsala para notas, logs, salidas que se pegarán en otra herramienta, o cuando el usuario pida explícitamente texto plano sin formato.
+Use it for notes, logs, output that will be pasted into another tool, or when the user explicitly asks for plain text without formatting.
 
-Errores comunes:
-- No esperes tablas bonitas: en texto plano la sintaxis de tabla Markdown se conserva tal cual. Si necesitas columnas alineadas, formatéalas tú mismo con espacios.
-- Para conservar saltos de línea exactos, escríbelos directamente en el contenido.
+Common mistakes:
+- Do not expect pretty tables: in plain text the Markdown table syntax is kept as-is. If you need aligned columns, format them yourself with spaces.
+- To keep exact line breaks, write them directly in the content.
 
-Si el usuario quiere conservar el formato Markdown (encabezados, listas) en crudo, usa `formato: "md"` en su lugar.
+If the user wants to keep the Markdown formatting (headings, lists) raw, use `formato: "md"` instead.

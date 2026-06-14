@@ -20,19 +20,19 @@ from app.logging_config import logger
 
 def _safe_research_path(filename: str):
     if "/" in filename or "\\" in filename or ".." in filename:
-        raise ValueError("Nombre de informe invalido.")
+        raise ValueError("Invalid report name.")
     path = RESEARCH_DIR / filename
     return path
 
 
 def save_research(nombre: str, contenido_md: str) -> str:
     """Persist a structured Markdown research report and return its filename."""
-    safe_name = re.sub(r"[^\w\-]", "_", nombre) or "investigacion"
+    safe_name = re.sub(r"[^\w\-]", "_", nombre) or "research"
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
     filename = f"{safe_name}_{timestamp}.md"
     dest = RESEARCH_DIR / filename
     dest.write_text(contenido_md, encoding="utf-8")
-    logger.info("Investigacion guardada: %s (%d bytes)", filename, dest.stat().st_size)
+    logger.info("Research saved: %s (%d bytes)", filename, dest.stat().st_size)
     return filename
 
 
@@ -45,7 +45,7 @@ def read_research(filename: str) -> str:
         if alt.exists():
             path = alt
         else:
-            return f"No se encontro el informe de investigacion '{filename}'."
+            return f"The research report '{filename}' was not found."
     return path.read_text(encoding="utf-8")
 
 

@@ -52,7 +52,7 @@ class Conversation(Base):
     project_id = Column(
         Integer, ForeignKey("projects.id", ondelete="CASCADE"), nullable=False, index=True
     )
-    title = Column(String(300), default="Nueva conversación")
+    title = Column(String(300), default="New conversation")
     created_at = Column(DateTime, default=_now)
     # NOTE: updated_at is NOT auto-updated by onupdate alone when child messages
     # are inserted. Touch it explicitly in chat.py when saving messages.

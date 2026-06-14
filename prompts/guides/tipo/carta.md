@@ -1,24 +1,24 @@
-<!-- desc: Carta o comunicación formal (carta de presentación, comunicado, notificación) con membrete, saludo, cuerpo y despedida. -->
-# Tipo: Carta formal
+<!-- desc: Formal letter or communication (cover letter, announcement, notification) with letterhead, greeting, body and closing. -->
+# Type: Formal letter
 
-Comunicación formal. Mejor en **DOCX** (editable) o **PDF** vía `generar_documento_markdown`. Para membrete con logo o diseño de marca, usa `estilo_css` (PDF) o la vía código.
+Formal communication. Best in **DOCX** (editable) or **PDF** via `generar_documento_markdown`. For a letterhead with a logo or brand design, use `estilo_css` (PDF) or the code path.
 
-## Estructura
-1. **Membrete / remitente** — nombre y datos de quien firma u organización (arriba).
-2. **Lugar y fecha**.
-3. **Destinatario** — nombre, cargo, organización.
-4. **Saludo** — "Estimado/a …,".
-5. **Cuerpo** — primer párrafo con el propósito; párrafos intermedios con el detalle; párrafo de cierre con la acción esperada o agradecimiento.
-6. **Despedida** — "Atentamente," / "Un cordial saludo,".
-7. **Firma** — nombre y cargo.
+## Structure
+1. **Letterhead / sender** — name and details of the signer or organization (top).
+2. **Place and date**.
+3. **Recipient** — name, title, organization.
+4. **Greeting** — "Dear …,".
+5. **Body** — first paragraph with the purpose; middle paragraphs with the detail; closing paragraph with the expected action or thanks.
+6. **Closing** — "Sincerely," / "Best regards,".
+7. **Signature** — name and title.
 
-## Buenas prácticas
-- Un solo propósito claro por carta.
-- Tono cortés y profesional; adapta el registro al destinatario.
-- Párrafos breves; ve al grano en las primeras líneas.
-- Personaliza con los datos concretos del caso (usa `buscar_en_documentos` si la carta se basa en el proyecto).
+## Best practices
+- A single clear purpose per letter.
+- Courteous and professional tone; adapt the register to the recipient.
+- Short paragraphs; get to the point in the first lines.
+- Personalize with the specific details of the case (use `buscar_en_documentos` if the letter is based on the project).
 
-## Errores a evitar
-- Saludo o despedida genéricos cuando conoces el nombre.
-- Mezclar varios asuntos sin relación.
-- Cuerpo demasiado largo: si excede una página, considera un reporte.
+## Mistakes to avoid
+- Generic greeting or closing when you know the name.
+- Mixing several unrelated subjects.
+- A body that is too long: if it exceeds one page, consider a report.

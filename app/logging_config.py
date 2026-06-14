@@ -36,7 +36,7 @@ def _setup() -> logging.Logger:
         fh.setFormatter(logging.Formatter(LOG_FORMAT, DATE_FORMAT))
         log.addHandler(fh)
     except OSError as e:
-        print(f"[briefscope] No se pudo crear el log file: {e}")
+        print(f"[briefscope] Could not create the log file: {e}")
 
     log.addHandler(ch)
     log.propagate = False

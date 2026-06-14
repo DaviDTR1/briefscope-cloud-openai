@@ -39,7 +39,7 @@ async def chat(
 ):
     project = db.query(models.Project).filter(models.Project.id == project_id).first()
     if not project:
-        raise HTTPException(status_code=404, detail="Proyecto no encontrado")
+        raise HTTPException(status_code=404, detail="Project not found")
 
     logger.info("Chat request -- project=%s conv=%s", project_id, body.conversation_id)
 
@@ -49,7 +49,7 @@ async def chat(
             models.Conversation.project_id == project_id,
         ).first()
         if not conv:
-            raise HTTPException(status_code=404, detail="Conversacion no encontrada")
+            raise HTTPException(status_code=404, detail="Conversation not found")
     else:
         conv = models.Conversation(project_id=project_id)
         db.add(conv)
@@ -108,7 +108,7 @@ async def chat(
 def list_conversations(project_id: int, db: Session = Depends(get_db)):
     project = db.query(models.Project).filter(models.Project.id == project_id).first()
     if not project:
-        raise HTTPException(status_code=404, detail="Proyecto no encontrado")
+        raise HTTPException(status_code=404, detail="Project not found")
 
     active_count_sq = (
         db.query(
@@ -144,7 +144,7 @@ def get_conversation(project_id: int, conv_id: int, db: Session = Depends(get_db
         models.Conversation.project_id == project_id,
     ).first()
     if not conv:
-        raise HTTPException(status_code=404, detail="Conversacion no encontrada")
+        raise HTTPException(status_code=404, detail="Conversation not found")
     out = schemas.ConversationDetail.model_validate(conv)
     out.message_count = len([m for m in conv.messages if not m.is_compacted])
     out.messages = [
@@ -162,7 +162,7 @@ def delete_conversation(project_id: int, conv_id: int, db: Session = Depends(get
         models.Conversation.project_id == project_id,
     ).first()
     if not conv:
-        raise HTTPException(status_code=404, detail="Conversacion no encontrada")
+        raise HTTPException(status_code=404, detail="Conversation not found")
     db.delete(conv)
     db.commit()
     logger.info("Conversacion %s eliminada", conv_id)
@@ -245,10 +245,10 @@ async def _sse_generator(
                 db.commit()
                 db.refresh(conv)
                 await maybe_compact(conv, db)
-                logger.debug("Respuesta persistida -- conv=%s chars=%s", conv_id, len(full_response))
+                logger.debug("Response persisted -- conv=%s chars=%s", conv_id, len(full_response))
         except Exception as exc:
-            logger.exception("Error al persistir respuesta: %s", exc)
-            yield _sse("error", f"Error al guardar respuesta: {exc}")
+            logger.exception("Error persisting response: %s", exc)
+            yield _sse("error", f"Error saving response: {exc}")
         finally:
             db.close()
 

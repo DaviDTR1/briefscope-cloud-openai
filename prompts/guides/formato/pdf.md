@@ -1,45 +1,45 @@
-# Guía de formato: PDF
+# Format guide: PDF
 
-Hay **dos vías** para producir un PDF. Elige según la complejidad visual.
+There are **two paths** to produce a PDF. Choose based on visual complexity.
 
-## Vía rápida — `generar_documento_markdown` (recomendada por defecto)
-Escribe el documento en **Markdown** y el motor lo convierte a PDF (Markdown → HTML → PDF con WeasyPrint). Soporta Unicode completo, tablas, listas, citas, código y **CSS propio**.
+## Fast path — `generar_documento_markdown` (recommended by default)
+Write the document in **Markdown** and the engine converts it to PDF (Markdown → HTML → PDF with WeasyPrint). Supports full Unicode, tables, lists, quotes, code and **your own CSS**.
 
-Contrato:
+Contract:
 - `formato`: `"pdf"`
-- `contenido_markdown`: el documento en Markdown.
-- `nombre_archivo`: sin extensión, solo letras/números/guiones.
-- `estilo_css` (opcional): reglas CSS completas (`@page`, `body`, `h1`, `table`...). Si lo omites se aplica un estilo profesional por defecto (A4, tipografía limpia, tablas con cabecera de color).
+- `contenido_markdown`: the document in Markdown.
+- `nombre_archivo`: without extension, only letters/numbers/hyphens.
+- `estilo_css` (optional): full CSS rules (`@page`, `body`, `h1`, `table`...). If you omit it, a default professional style is applied (A4, clean typography, tables with a colored header).
 
-Úsala para informes, memos, documentación, propuestas y cualquier documento que sea texto estructurado. Para un acabado de marca, pasa tu propio `estilo_css`.
+Use it for reports, memos, documentation, proposals and any document that is structured text. For a branded finish, pass your own `estilo_css`.
 
-Errores comunes a evitar:
-- No incluyas el bloque `<html>` ni `<style>`: solo Markdown (y opcionalmente CSS por separado en `estilo_css`).
-- Las tablas Markdown necesitan la fila de separación `|---|---|`.
-- Para saltos de página en CSS usa `page-break-before: always;` en un selector.
+Common mistakes to avoid:
+- Do not include the `<html>` or `<style>` block: only Markdown (and optionally CSS separately in `estilo_css`).
+- Markdown tables need the separator row `|---|---|`.
+- For CSS page breaks use `page-break-before: always;` on a selector.
 
-## Vía código — `generar_documento_codigo`
-Solo si necesitas **control milimétrico**: certificados, posicionamiento absoluto, gráficos vectoriales, portadas con imágenes a sangre. Escribes Python con **reportlab**.
+## Code path — `generar_documento_codigo`
+Only if you need **pixel-perfect control**: certificates, absolute positioning, vector graphics, cover pages with full-bleed images. You write Python with **reportlab**.
 
-Contrato:
+Contract:
 - `formato`: `"pdf"`
-- `codigo_python`: script que construye el PDF. Tienes `OUTPUT_PATH` (ruta destino) y el helper `guardar_documento(obj)`. Con reportlab normalmente escribes directo en `OUTPUT_PATH`.
-- `nombre_archivo`: sin extensión.
+- `codigo_python`: script that builds the PDF. You have `OUTPUT_PATH` (destination path) and the helper `guardar_documento(obj)`. With reportlab you usually write directly to `OUTPUT_PATH`.
+- `nombre_archivo`: without extension.
 
-Ejemplo mínimo:
+Minimal example:
 ```python
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 c = canvas.Canvas(OUTPUT_PATH, pagesize=A4)
 c.setFont("Helvetica-Bold", 24)
-c.drawString(72, 760, "Título")
+c.drawString(72, 760, "Title")
 c.showPage()
 c.save()
 ```
 
-Errores comunes:
-- Recuerda llamar a `c.save()` (o `doc.build(...)` con platypus) o el archivo quedará vacío.
-- Las coordenadas de reportlab tienen el origen abajo-izquierda.
-- Para texto largo con estilos usa `platypus` (SimpleDocTemplate + Paragraph), no `drawString`.
+Common mistakes:
+- Remember to call `c.save()` (or `doc.build(...)` with platypus) or the file will be empty.
+- reportlab coordinates have their origin at the bottom-left.
+- For long styled text use `platypus` (SimpleDocTemplate + Paragraph), not `drawString`.
 
-**Decisión rápida:** ¿es texto estructurado? → vía rápida. ¿es diseño a medida? → vía código.
+**Quick decision:** is it structured text? → fast path. Is it custom design? → code path.

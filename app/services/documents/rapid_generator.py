@@ -62,8 +62,8 @@ def generate_markdown(
     fmt = formato.lower().strip()
     if fmt not in _VALID:
         raise ValueError(
-            f"Formato '{formato}' no soportado en modo Markdown. "
-            f"Usa uno de {_VALID} o cambia a la herramienta de codigo (pptx/xlsx)."
+            f"Format '{formato}' is not supported in Markdown mode. "
+            f"Use one of {_VALID} or switch to the code tool (pptx/xlsx)."
         )
 
     dest = build_dest(fmt, nombre)
@@ -79,7 +79,7 @@ def generate_markdown(
     else:  # txt
         dest.write_text(_strip_markdown(markdown_content), encoding="utf-8")
 
-    logger.info("Documento (markdown) generado: %s (%d bytes)", dest.name, dest.stat().st_size)
+    logger.info("Document (markdown) generated: %s (%d bytes)", dest.name, dest.stat().st_size)
     return dest.name
 
 
@@ -96,9 +96,9 @@ def _md_to_docx(content: str, dest: Path) -> None:
             check=True, capture_output=True, text=True, timeout=60,
         )
     except FileNotFoundError as exc:
-        raise RuntimeError("pandoc no esta instalado en el contenedor.") from exc
+        raise RuntimeError("pandoc is not installed in the container.") from exc
     except subprocess.CalledProcessError as exc:
-        raise RuntimeError(f"pandoc fallo al generar DOCX: {exc.stderr}") from exc
+        raise RuntimeError(f"pandoc failed to generate DOCX: {exc.stderr}") from exc
     finally:
         os.unlink(tmp_path)
 
@@ -122,8 +122,8 @@ def _md_to_html_string(content: str, estilo_css: str | None) -> str:
     )
     css = estilo_css if estilo_css else _DEFAULT_CSS
     return (
-        "<!DOCTYPE html>\n<html lang=\"es\">\n<head>\n<meta charset=\"utf-8\">\n"
-        f"<title>Documento</title>\n<style>{css}</style>\n</head>\n<body>\n"
+        "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n"
+        f"<title>Document</title>\n<style>{css}</style>\n</head>\n<body>\n"
         f"{body}\n</body>\n</html>"
     )
 

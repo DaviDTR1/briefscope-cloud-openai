@@ -40,15 +40,15 @@ from app.agents.registry import build_tools
 from app.services.llm.provider import build_llm
 
 _TOOL_LABEL = {
-    "buscar_en_documentos":        "Buscando informacion en documentos",
-    "consultar_guia_formato":      "Consultando guia de formato",
-    "consultar_guia_tipo":         "Consultando guia de tipo",
-    "guardar_investigacion":       "Guardando investigacion",
-    "leer_investigacion":          "Leyendo investigacion",
-    "leer_documento":              "Leyendo documento",
-    "generar_documento_markdown":  "Generando documento (Markdown)",
-    "generar_documento_codigo":    "Generando documento (codigo)",
-    "invocar_creador_documentos":  "Creando documento",
+    "buscar_en_documentos":        "Searching information in documents",
+    "consultar_guia_formato":      "Consulting format guide",
+    "consultar_guia_tipo":         "Consulting type guide",
+    "guardar_investigacion":       "Saving research",
+    "leer_investigacion":          "Reading research",
+    "leer_documento":              "Reading document",
+    "generar_documento_markdown":  "Generating document (Markdown)",
+    "generar_documento_codigo":    "Generating document (code)",
+    "invocar_creador_documentos":  "Creating document",
 }
 
 
@@ -89,11 +89,11 @@ def _extract_text(chunk) -> str:
 def _format_doc_list(names: list[str]) -> str:
     """Render the orchestrator-visible list of document filenames (names only)."""
     if not names:
-        return "No hay documentos cargados en el proyecto todavia."
+        return "No documents have been loaded into the project yet."
     items = "\n".join(f"- {n}" for n in names)
     return (
-        "Nombres de los documentos cargados en el proyecto (solo los nombres, "
-        "nunca su contenido):\n" + items
+        "Names of the documents loaded into the project (names only, "
+        "never their content):\n" + items
     )
 
 
@@ -203,7 +203,7 @@ async def run_agent(
             elif name in ("generar_documento_markdown", "generar_documento_codigo"):
                 formato = (args.get("formato") or "txt").lower().strip()
                 nombre = args.get("nombre_archivo", "documento")
-                yield _thinking(f"Generando {formato.upper()}")
+                yield _thinking(f"Generating {formato.upper()}")
                 result = ""
                 try:
                     if name == "generar_documento_markdown":
@@ -220,7 +220,7 @@ async def run_agent(
                         gen = generate_code(codigo, formato, nombre)
                         if not gen["success"]:
                             raise RuntimeError(
-                                "El codigo no genero el documento. Corrige y reintenta.\n"
+                                "The code did not generate the document. Fix it and retry.\n"
                                 f"stderr:\n{gen['stderr']}"
                             )
                         filename = gen["filename"]
@@ -229,24 +229,24 @@ async def run_agent(
                     ctx.generated_files.append(filename)
                     yield json.dumps({"__file_ready__": True, "filename": filename, "formato": formato})
                     result = (
-                        f"Archivo '{filename}' generado exitosamente. "
-                        "Puedes generar mas documentos si el usuario lo necesita."
+                        f"File '{filename}' generated successfully. "
+                        "You can generate more documents if the user needs them."
                     )
                 except Exception as exc:
                     logger.exception("Error %s: %s", name, exc)
-                    result = f"Error al generar archivo: {exc}"
+                    result = f"Error generating file: {exc}"
                 new_msgs.append(ToolMessage(content=result, tool_call_id=call_id))
 
             else:
                 tool = executables.get(name)
                 if tool is None:
-                    result = f"Herramienta desconocida: {name}"
+                    result = f"Unknown tool: {name}"
                 else:
                     try:
                         result = tool.invoke(args)
                     except Exception as exc:
                         logger.exception("Error tool %s: %s", name, exc)
-                        result = f"Error en {name}: {exc}"
+                        result = f"Error in {name}: {exc}"
                 new_msgs.append(ToolMessage(content=str(result), tool_call_id=call_id))
 
         lc_messages = lc_messages + new_msgs
@@ -263,8 +263,8 @@ async def _delegate(name: str, args: dict, ctx: RunContext, depth: int):
 
     if depth + 1 > max_depth or ctx.delegations >= max_delegations:
         yield None, (
-            "Limite de delegaciones alcanzado. Responde al usuario con la "
-            "informacion ya disponible sin delegar mas."
+            "Delegation limit reached. Answer the user with the "
+            "information already available without delegating further."
         )
         return
 
@@ -273,12 +273,12 @@ async def _delegate(name: str, args: dict, ctx: RunContext, depth: int):
     # invocar_creador_documentos
     nombre_informe = args.get("nombre_informe", "")
     instruccion = args.get("instruccion", "")
-    formato = args.get("formato") or "el mas conveniente"
+    formato = args.get("formato") or "the most appropriate one"
     sink: list[str] = []
     user_text = (
-        f"Informe de investigacion: {nombre_informe}\n"
-        f"Instruccion: {instruccion}\n"
-        f"Formato deseado: {formato}"
+        f"Source content: {nombre_informe}\n"
+        f"Instruction: {instruccion}\n"
+        f"Desired format: {formato}"
     )
     async for ev in run_agent(
         CREATOR, [{"role": "user", "content": user_text}], ctx,
@@ -286,8 +286,8 @@ async def _delegate(name: str, args: dict, ctx: RunContext, depth: int):
     ):
         yield ev, None
     sub_text = sink[0] if sink else ""
-    files = ", ".join(ctx.generated_files) if ctx.generated_files else "(ninguno)"
-    yield None, f"{sub_text}\n\n[ARCHIVOS_GENERADOS: {files}]"
+    files = ", ".join(ctx.generated_files) if ctx.generated_files else "(none)"
+    yield None, f"{sub_text}\n\n[GENERATED_FILES: {files}]"
     return
 
 
@@ -296,7 +296,7 @@ async def _delegate(name: str, args: dict, ctx: RunContext, depth: int):
 # --------------------------------------------------------------------------- #
 async def run_orchestrated(messages: list[dict], ctx: RunContext) -> AsyncGenerator[str, None]:
     """Default 'agentic' mode: the orchestrator reasons with sub-agents as tools."""
-    yield _thinking("Analizando solicitud")
+    yield _thinking("Analyzing request")
     sink: list[str] = []
     async for ev in run_agent(
         ORCHESTRATOR, messages, ctx, depth=0, stream_text=True, result_sink=sink,
@@ -308,14 +308,19 @@ async def run_orchestrated(messages: list[dict], ctx: RunContext) -> AsyncGenera
 # Pipeline fallback (risk mitigation §6)
 # --------------------------------------------------------------------------- #
 _DOC_KEYWORDS = (
+    # Spanish
     "genera", "generar", "documento", "descargable", "archivo", "informe en",
-    "pdf", "word", "docx", "excel", "xlsx", "powerpoint", "pptx", "presentacion",
-    "presentación", "diapositiv", "hoja de calculo", "hoja de cálculo",
+    "presentacion", "presentación", "diapositiv", "hoja de calculo", "hoja de cálculo",
+    # English
+    "generate", "create", "make", "document", "downloadable", "file", "report in",
+    "presentation", "slide", "spreadsheet", "letter", "invoice",
+    # Format names (both languages)
+    "pdf", "word", "docx", "excel", "xlsx", "powerpoint", "pptx",
 )
 _FORMAT_KEYWORDS = {
     "pdf": "pdf", "word": "docx", "docx": "docx", "excel": "xlsx", "xlsx": "xlsx",
-    "powerpoint": "pptx", "pptx": "pptx", "presentaci": "pptx", "diapositiv": "pptx",
-    "markdown": "md",
+    "powerpoint": "pptx", "pptx": "pptx", "presentaci": "pptx", "presentation": "pptx",
+    "diapositiv": "pptx", "slide": "pptx", "spreadsheet": "xlsx", "markdown": "md",
 }
 
 
@@ -346,7 +351,7 @@ async def run_pipeline(messages: list[dict], ctx: RunContext) -> AsyncGenerator[
     wants_doc = _wants_document(user_message)
 
     # Main agent searches the documents directly, with flat tools only.
-    yield _thinking("Reuniendo informacion de los documentos")
+    yield _thinking("Gathering information from the documents")
     sink: list[str] = []
     async for ev in run_agent(
         ORCHESTRATOR, messages, ctx,
@@ -361,17 +366,17 @@ async def run_pipeline(messages: list[dict], ctx: RunContext) -> AsyncGenerator[
         # The plain-text answer was already streamed by the agent above.
         if not research_text:
             yield _thinking("")
-            yield "No se pudo completar la consulta."
+            yield "The query could not be completed."
         return
 
     # Document requested: persist the findings and hand them to the creator.
     report = ctx.saved_research[-1] if ctx.saved_research else None
     if report is None:
         from app.services.research_store import save_research
-        report = save_research("investigacion", research_text or "Sin informacion relevante.")
+        report = save_research("research", research_text or "No relevant information.")
         ctx.saved_research.append(report)
 
-    fmt = _detect_format(user_message) or "el mas conveniente"
+    fmt = _detect_format(user_message) or "the most appropriate one"
     async for ev, _ in _delegate(
         "invocar_creador_documentos",
         {"nombre_informe": report, "instruccion": user_message, "formato": fmt},
@@ -380,4 +385,4 @@ async def run_pipeline(messages: list[dict], ctx: RunContext) -> AsyncGenerator[
         if ev is not None:
             yield ev
     yield _thinking("")
-    yield "He generado el documento solicitado a partir de la informacion de tus documentos."
+    yield "I have generated the requested document from the information in your documents."

@@ -28,8 +28,8 @@ _PREAMBLE = '''\
 import sys
 from pathlib import Path
 
-# OUTPUT_PATH es un str: lo aceptan python-docx, python-pptx, openpyxl y
-# reportlab (canvas.Canvas requiere str, no acepta Path).
+# OUTPUT_PATH is a str: python-docx, python-pptx, openpyxl and reportlab accept
+# it (canvas.Canvas requires a str, it does not accept a Path).
 OUTPUT_PATH = r"{output_path}"
 OUTPUT_FORMAT = "{output_format}"
 _OUT = Path(OUTPUT_PATH)
@@ -37,15 +37,15 @@ _OUT.parent.mkdir(parents=True, exist_ok=True)
 
 
 def guardar_documento(objeto, formato=OUTPUT_FORMAT):
-    """Guarda el documento generado en la ruta correcta (OUTPUT_PATH)."""
+    """Save the generated document to the correct path (OUTPUT_PATH)."""
     if hasattr(objeto, "save"):
         objeto.save(OUTPUT_PATH)
     elif hasattr(objeto, "output"):
         objeto.output(OUTPUT_PATH)
     else:
         raise TypeError(
-            "El objeto no se puede guardar: usa un objeto con metodo .save() "
-            "(Document/Presentation/Workbook/Canvas) o llama tu mismo a c.save()."
+            "The object cannot be saved: use an object with a .save() method "
+            "(Document/Presentation/Workbook/Canvas) or call c.save() yourself."
         )
     return OUTPUT_PATH
 '''
@@ -54,8 +54,8 @@ _EPILOGUE = '''\
 
 if not _OUT.exists():
     sys.stderr.write(
-        "El codigo termino sin crear el archivo. Asegurate de llamar a "
-        "guardar_documento(objeto) o de guardar en OUTPUT_PATH.\\n"
+        "The code finished without creating the file. Make sure to call "
+        "guardar_documento(objeto) or to save to OUTPUT_PATH.\\n"
     )
     sys.exit(2)
 '''
@@ -77,8 +77,8 @@ def generate_code(
             "filename": None,
             "stdout": "",
             "stderr": (
-                f"Formato '{formato}' no soportado en modo codigo. "
-                f"Usa uno de {_VALID} (para html/txt usa el modo Markdown)."
+                f"Format '{formato}' is not supported in code mode. "
+                f"Use one of {_VALID} (for html/txt use Markdown mode)."
             ),
         }
 
@@ -102,9 +102,9 @@ def generate_code(
         )
         ok = proc.returncode == 0 and dest.exists()
         if ok:
-            logger.info("Documento (codigo) generado: %s (%d bytes)", dest.name, dest.stat().st_size)
+            logger.info("Document (code) generated: %s (%d bytes)", dest.name, dest.stat().st_size)
         else:
-            logger.warning("Fallo generacion por codigo (%s): %s", fmt, proc.stderr[-500:])
+            logger.warning("Code generation failed (%s): %s", fmt, proc.stderr[-500:])
         return {
             "success": ok,
             "filename": dest.name if ok else None,
@@ -114,10 +114,10 @@ def generate_code(
     except subprocess.TimeoutExpired:
         return {
             "success": False, "filename": None, "stdout": "",
-            "stderr": f"Tiempo de ejecucion agotado ({timeout_seconds}s).",
+            "stderr": f"Execution timed out ({timeout_seconds}s).",
         }
     except Exception as exc:  # pragma: no cover - defensive
-        logger.exception("Error ejecutando codigo de documento: %s", exc)
+        logger.exception("Error running document code: %s", exc)
         return {"success": False, "filename": None, "stdout": "", "stderr": str(exc)}
     finally:
         os.unlink(script_path)

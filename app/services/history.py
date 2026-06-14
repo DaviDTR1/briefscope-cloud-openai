@@ -53,8 +53,8 @@ async def maybe_compact(conversation: models.Conversation, db: Session) -> None:
         f"{m.role.upper()}: {m.content[:500]}" for m in to_compact
     )
     prompt = (
-        "Resume de forma concisa los puntos clave, cambios solicitados y "
-        "decisiones tomadas en la siguiente conversación:\n\n" + history_text
+        "Concisely summarize the key points, requested changes and "
+        "decisions made in the following conversation:\n\n" + history_text
     )
 
     summary_text = await _call_fast_llm(prompt)
@@ -122,6 +122,6 @@ async def _call_fast_llm(prompt: str) -> str:
             return resp.text or ""
 
     except Exception as e:
-        return f"[Error al compactar historial: {e}]"
+        return f"[Error compacting history: {e}]"
 
     return ""

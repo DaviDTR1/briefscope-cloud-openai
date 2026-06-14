@@ -1,44 +1,44 @@
-# Guía de formato: DOCX (Word)
+# Format guide: DOCX (Word)
 
-Dos vías. La rápida cubre la mayoría de los casos.
+Two paths. The fast one covers most cases.
 
-## Vía rápida — `generar_documento_markdown` (recomendada)
-Escribe el documento en **Markdown** y pandoc lo convierte a un `.docx` rico y **editable** (encabezados como estilos de Word, tablas, listas, negrita/cursiva, citas, código).
+## Fast path — `generar_documento_markdown` (recommended)
+Write the document in **Markdown** and pandoc converts it to a rich, **editable** `.docx` (headings as Word styles, tables, lists, bold/italic, quotes, code).
 
-Contrato:
+Contract:
 - `formato`: `"docx"`
-- `contenido_markdown`: el documento en Markdown (GitHub Flavored Markdown).
-- `nombre_archivo`: sin extensión.
-- `estilo_css`: **se ignora** para DOCX (pandoc usa la plantilla de Word por defecto).
+- `contenido_markdown`: the document in Markdown (GitHub Flavored Markdown).
+- `nombre_archivo`: without extension.
+- `estilo_css`: **ignored** for DOCX (pandoc uses the default Word template).
 
-Úsala para informes, cartas, memos, propuestas, actas — cualquier documento de texto que el usuario quiera abrir y editar en Word.
+Use it for reports, letters, memos, proposals, minutes — any text document the user wants to open and edit in Word.
 
-Errores comunes:
-- Las tablas necesitan la fila separadora `|---|---|`.
-- Usa encabezados Markdown (`#`, `##`, `###`) para que Word genere estilos de título reales (y tabla de contenido si hace falta).
-- No metas HTML crudo; pandoc lo trata como texto literal.
+Common mistakes:
+- Tables need the separator row `|---|---|`.
+- Use Markdown headings (`#`, `##`, `###`) so Word generates real heading styles (and a table of contents if needed).
+- Do not put raw HTML; pandoc treats it as literal text.
 
-## Vía código — `generar_documento_codigo`
-Solo para control fino: estilos de párrafo personalizados, anchos de columna exactos, encabezados/pies, imágenes posicionadas. Escribes Python con **python-docx**.
+## Code path — `generar_documento_codigo`
+Only for fine control: custom paragraph styles, exact column widths, headers/footers, positioned images. You write Python with **python-docx**.
 
-Contrato:
+Contract:
 - `formato`: `"docx"`
-- `codigo_python`: construye un `Document()` y termina con `guardar_documento(doc)` (o `doc.save(OUTPUT_PATH)`).
-- `nombre_archivo`: sin extensión.
+- `codigo_python`: build a `Document()` and end with `guardar_documento(doc)` (or `doc.save(OUTPUT_PATH)`).
+- `nombre_archivo`: without extension.
 
-Ejemplo mínimo:
+Minimal example:
 ```python
 from docx import Document
 from docx.shared import Pt, RGBColor
 doc = Document()
-h = doc.add_heading("Título", level=1)
-doc.add_paragraph("Texto del cuerpo.")
+h = doc.add_heading("Title", level=1)
+doc.add_paragraph("Body text.")
 guardar_documento(doc)
 ```
 
-Errores comunes:
-- No olvides `guardar_documento(doc)` al final.
-- Para color/tamaño de fuente trabaja sobre `run.font` (no sobre el párrafo).
-- `add_heading` con `level=0` crea un título de documento, no un H1.
+Common mistakes:
+- Do not forget `guardar_documento(doc)` at the end.
+- For font color/size work on `run.font` (not on the paragraph).
+- `add_heading` with `level=0` creates a document title, not an H1.
 
-**Decisión rápida:** ¿texto editable estándar? → vía rápida. ¿maquetación específica de Word? → vía código.
+**Quick decision:** standard editable text? → fast path. Word-specific layout? → code path.

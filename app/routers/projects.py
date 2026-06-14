@@ -69,5 +69,5 @@ def delete_project(project_id: int, db: Session = Depends(get_db)):
 def _get_or_404(project_id: int, db: Session) -> models.Project:
     p = db.query(models.Project).filter(models.Project.id == project_id).first()
     if not p:
-        raise HTTPException(status_code=404, detail="Proyecto no encontrado")
+        raise HTTPException(status_code=404, detail="Project not found")
     return p

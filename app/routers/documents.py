@@ -20,13 +20,13 @@ async def upload_document(
     # Verify project exists
     project = db.query(models.Project).filter(models.Project.id == project_id).first()
     if not project:
-        raise HTTPException(status_code=404, detail="Proyecto no encontrado")
+        raise HTTPException(status_code=404, detail="Project not found")
 
     ext = infer_file_type(file.filename or "")
     if ext not in SUPPORTED_EXTENSIONS:
         raise HTTPException(
             status_code=422,
-            detail=f"Tipo de archivo no soportado. Soportados: {', '.join(SUPPORTED_EXTENSIONS)}",
+            detail=f"Unsupported file type. Supported: {', '.join(SUPPORTED_EXTENSIONS)}",
         )
 
     file_bytes = await file.read()
@@ -58,7 +58,7 @@ async def upload_document(
 def list_documents(project_id: int, db: Session = Depends(get_db)):
     project = db.query(models.Project).filter(models.Project.id == project_id).first()
     if not project:
-        raise HTTPException(status_code=404, detail="Proyecto no encontrado")
+        raise HTTPException(status_code=404, detail="Project not found")
     docs = (
         db.query(models.Document)
         .filter(models.Document.project_id == project_id)
@@ -72,7 +72,7 @@ def list_documents(project_id: int, db: Session = Depends(get_db)):
 def delete_document(document_id: int, db: Session = Depends(get_db)):
     doc = db.query(models.Document).filter(models.Document.id == document_id).first()
     if not doc:
-        raise HTTPException(status_code=404, detail="Documento no encontrado")
+        raise HTTPException(status_code=404, detail="Document not found")
     rag_service.delete_document(doc.project_id, document_id)
     db.delete(doc)
     db.commit()

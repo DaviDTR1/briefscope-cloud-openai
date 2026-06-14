@@ -81,8 +81,8 @@ def _build_ollama(temperature: float) -> Any:
         from langchain_ollama import ChatOllama
     except ImportError as exc:  # pragma: no cover - only in cloud variant
         raise ValueError(
-            "[Error: langchain-ollama no esta instalado en esta variante. "
-            "Usa una build LOCAL de BriefScope.]"
+            "[Error: langchain-ollama is not installed in this variant. "
+            "Use a LOCAL build of BriefScope.]"
         ) from exc
     return ChatOllama(
         model=model or "llama3.1",

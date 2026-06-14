@@ -31,10 +31,10 @@ def read_format_guide(formato: str) -> str:
     path = _FORMAT_DIR / f"{key}.md"
     if path.is_file():
         return path.read_text(encoding="utf-8")
-    available = ", ".join(sorted(p.stem for p in _FORMAT_DIR.glob("*.md"))) or "(ninguno)"
+    available = ", ".join(sorted(p.stem for p in _FORMAT_DIR.glob("*.md"))) or "(none)"
     return (
-        f"No hay guia de formato para '{formato}'. Formatos disponibles: {available}. "
-        "Usa Markdown bien estructurado (modo rapido) o codigo Python (modo codigo)."
+        f"There is no format guide for '{formato}'. Available formats: {available}. "
+        "Use well-structured Markdown (fast mode) or Python code (code mode)."
     )
 
 
@@ -45,8 +45,8 @@ def read_type_guide(tipo: str) -> str:
     if path.is_file():
         return path.read_text(encoding="utf-8")
     return (
-        f"No hay guia de tipo '{tipo}'.\n\n{type_guides_catalog()}\n\n"
-        "Si ninguna encaja, diseña el documento con tu propio criterio profesional."
+        f"There is no type guide '{tipo}'.\n\n{type_guides_catalog()}\n\n"
+        "If none fits, design the document with your own professional judgment."
     )
 
 
@@ -58,7 +58,7 @@ def list_type_guides() -> list[tuple[str, str]]:
     for path in sorted(_TYPE_DIR.glob("*.md")):
         text = path.read_text(encoding="utf-8")
         m = _DESC_RE.search(text)
-        desc = m.group(1).strip() if m else "(sin descripcion)"
+        desc = m.group(1).strip() if m else "(no description)"
         out.append((path.stem, desc))
     return out
 
@@ -67,6 +67,6 @@ def type_guides_catalog() -> str:
     """Render the type-guide catalog (slug + short description) for the prompt."""
     guides = list_type_guides()
     if not guides:
-        return "No hay guias de tipo disponibles."
+        return "No type guides available."
     lines = [f"- `{slug}` — {desc}" for slug, desc in guides]
-    return "Guias de tipo disponibles (carga con consultar_guia_tipo):\n" + "\n".join(lines)
+    return "Available type guides (load with consultar_guia_tipo):\n" + "\n".join(lines)

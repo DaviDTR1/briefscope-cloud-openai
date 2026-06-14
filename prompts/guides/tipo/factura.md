@@ -1,25 +1,25 @@
-<!-- desc: Factura, presupuesto o cotización con datos de emisor/cliente, tabla de conceptos, totales e impuestos. -->
-# Tipo: Factura / presupuesto
+<!-- desc: Invoice, budget or quote with issuer/client details, line-item table, totals and taxes. -->
+# Type: Invoice / quote
 
-Documento comercial con maquetación precisa. Mejor en **PDF** vía `generar_documento_codigo` (reportlab) si quieres cabecera de marca y totales bien alineados; o vía `generar_documento_markdown` con `estilo_css` propio para un acabado rápido. Para un libro de cálculo editable usa **XLSX**.
+Commercial document with precise layout. Best in **PDF** via `generar_documento_codigo` (reportlab) if you want a branded header and well-aligned totals; or via `generar_documento_markdown` with your own `estilo_css` for a quick finish. For an editable workbook use **XLSX**.
 
-## Elementos imprescindibles
-- **Encabezado**: nombre/logo del emisor, datos fiscales (NIF/CIF), dirección, contacto.
-- **Número de factura/presupuesto** y **fecha** (y fecha de vencimiento o validez).
-- **Datos del cliente**: nombre, identificación fiscal, dirección.
-- **Tabla de conceptos**: descripción, cantidad, precio unitario, importe.
-- **Totales**: base imponible, impuestos (IVA/IGIC u otros con su %), **total a pagar** destacado.
-- **Condiciones de pago**: método, cuenta/IBAN, plazo.
-- Notas o términos al pie si aplica.
+## Essential elements
+- **Header**: issuer name/logo, tax details (tax ID), address, contact.
+- **Invoice/quote number** and **date** (and due or validity date).
+- **Client details**: name, tax ID, address.
+- **Line-item table**: description, quantity, unit price, amount.
+- **Totals**: taxable base, taxes (VAT or others with their %), **total due** highlighted.
+- **Payment terms**: method, account/IBAN, deadline.
+- Notes or terms at the bottom if applicable.
 
-## Buenas prácticas
-- Alinea importes a la derecha; usa separador de miles y 2 decimales.
-- Calcula y muestra impuestos por separado del subtotal.
-- El total final debe resaltar (negrita, tamaño mayor o fondo de color).
-- Numeración y fecha siempre visibles arriba.
+## Best practices
+- Align amounts to the right; use a thousands separator and 2 decimals.
+- Compute and show taxes separately from the subtotal.
+- The final total should stand out (bold, larger size or colored background).
+- Number and date always visible at the top.
 
-## Errores a evitar
-- Olvidar los datos fiscales o el desglose de impuestos.
-- Importes mal alineados o sin formato monetario.
-- No incluir número de documento.
-- En XLSX, calcular totales en Python en vez de con fórmulas si el usuario los editará.
+## Mistakes to avoid
+- Forgetting tax details or the tax breakdown.
+- Misaligned amounts or no currency formatting.
+- Not including a document number.
+- In XLSX, computing totals in Python instead of with formulas if the user will edit them.

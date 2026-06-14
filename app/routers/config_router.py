@@ -68,8 +68,8 @@ def update_config(body: ConfigUpdate):
     if raw.get("cloud_model") is not None and not config.is_valid_cloud_model(raw["cloud_model"]):
         raise HTTPException(
             status_code=400,
-            detail=(f"El modelo '{raw['cloud_model']}' no pertenece al proveedor de esta "
-                    f"versión ({config.EMBEDDING_PROVIDER}). Elige un modelo del mismo proveedor."),
+            detail=(f"The model '{raw['cloud_model']}' does not belong to this version's "
+                    f"provider ({config.EMBEDDING_PROVIDER}). Choose a model from the same provider."),
         )
 
     # NOTE: "cloud_provider" is intentionally NOT updatable — the LLM provider is

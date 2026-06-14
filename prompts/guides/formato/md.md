@@ -1,17 +1,17 @@
-# Guía de formato: MD (Markdown)
+# Format guide: MD (Markdown)
 
-Una sola vía: **`generar_documento_markdown`** con `formato: "md"`.
+A single path: **`generar_documento_markdown`** with `formato: "md"`.
 
-Entrega el documento como un archivo `.md` **tal cual lo escribes** (sin conversión). El contenido se guarda íntegro, conservando encabezados, listas, tablas, negritas, enlaces y bloques de código.
+Deliver the document as a `.md` file **exactly as you write it** (no conversion). The content is saved in full, preserving headings, lists, tables, bold, links and code blocks.
 
-Contrato:
+Contract:
 - `formato`: `"md"`
-- `contenido_markdown`: el documento en Markdown final.
-- `nombre_archivo`: sin extensión.
-- `estilo_css`: se ignora.
+- `contenido_markdown`: the final document in Markdown.
+- `nombre_archivo`: without extension.
+- `estilo_css`: ignored.
 
-Úsala cuando el usuario quiera el fuente Markdown reutilizable (READMEs, documentación técnica, notas que editará en otro editor, contenido para un sistema que ya renderiza Markdown).
+Use it when the user wants the reusable Markdown source (READMEs, technical documentation, notes they will edit in another editor, content for a system that already renders Markdown).
 
-Errores comunes:
-- Asegúrate de que la sintaxis Markdown sea válida (filas separadoras de tabla, cierres de bloques de código con ```).
-- Si lo que el usuario quiere es un documento **renderizado** (no el fuente), elige `pdf`, `docx` o `html`.
+Common mistakes:
+- Make sure the Markdown syntax is valid (table separator rows, closing code blocks with ```).
+- If what the user wants is a **rendered** document (not the source), choose `pdf`, `docx` or `html`.

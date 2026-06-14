@@ -1,20 +1,20 @@
-# Guía de formato: HTML
+# Format guide: HTML
 
-Una sola vía: **`generar_documento_markdown`** con `formato: "html"`.
+A single path: **`generar_documento_markdown`** with `formato: "html"`.
 
-Escribe el documento en **Markdown** y el motor lo envuelve en una página HTML5 autónoma y con estilo (un solo archivo, sin dependencias externas).
+Write the document in **Markdown** and the engine wraps it in a self-contained, styled HTML5 page (a single file, no external dependencies).
 
-Contrato:
+Contract:
 - `formato`: `"html"`
-- `contenido_markdown`: el documento en Markdown (tablas, listas, código con resaltado básico, citas).
-- `nombre_archivo`: sin extensión.
-- `estilo_css` (opcional): CSS completo que reemplaza el estilo por defecto. Úsalo para colores de marca, tipografía o layout propio. Si lo omites se aplica un estilo profesional limpio.
+- `contenido_markdown`: the document in Markdown (tables, lists, code with basic highlighting, quotes).
+- `nombre_archivo`: without extension.
+- `estilo_css` (optional): full CSS that replaces the default style. Use it for brand colors, typography or your own layout. If you omit it, a clean professional style is applied.
 
-Úsala para páginas standalone, reportes navegables, fichas o cualquier entregable que se vea en navegador.
+Use it for standalone pages, browsable reports, fact sheets or any deliverable to be viewed in a browser.
 
-Errores comunes:
-- No envuelvas el contenido en `<html>`/`<body>`: el motor ya genera la página completa. Pasa solo Markdown.
-- Si quieres CSS propio va **entero** en `estilo_css`, no incrustado en el Markdown.
-- Las tablas Markdown requieren la fila separadora `|---|---|`.
+Common mistakes:
+- Do not wrap the content in `<html>`/`<body>`: the engine already generates the full page. Pass only Markdown.
+- If you want your own CSS it goes **entirely** in `estilo_css`, not embedded in the Markdown.
+- Markdown tables require the separator row `|---|---|`.
 
-Para PDF a partir del mismo contenido, usa `formato: "pdf"` (mismo motor, mismo CSS).
+For PDF from the same content, use `formato: "pdf"` (same engine, same CSS).

@@ -50,7 +50,7 @@ class AgentDef:
         try:
             template = path.read_text(encoding="utf-8")
         except OSError:
-            template = f"Eres el agente {self.name} de BriefScope.\n{{instructions}}\n{{doc_context}}"
+            template = f"You are the {self.name} agent of BriefScope.\n{{instructions}}\n{{doc_context}}"
         return (
             template
             .replace("{instructions}", instructions or "")

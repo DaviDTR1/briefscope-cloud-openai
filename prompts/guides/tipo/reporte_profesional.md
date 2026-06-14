@@ -1,25 +1,25 @@
-<!-- desc: Informe profesional extenso (análisis, due diligence, memo ejecutivo) con portada, resumen ejecutivo, secciones y conclusiones. -->
-# Tipo: Reporte profesional
+<!-- desc: Long professional report (analysis, due diligence, executive memo) with cover, executive summary, sections and conclusions. -->
+# Type: Professional report
 
-Documento de texto estructurado y con autoridad. Mejor en **PDF** o **DOCX** vía `generar_documento_markdown`. Si el cliente pide identidad de marca fuerte, pasa `estilo_css` propio (PDF) o usa la vía código.
+Structured, authoritative text document. Best in **PDF** or **DOCX** via `generar_documento_markdown`. If the client asks for strong brand identity, pass your own `estilo_css` (PDF) or use the code path.
 
-## Estructura recomendada
-1. **Portada / título** — título claro, subtítulo, fecha, autor/organización.
-2. **Resumen ejecutivo** — 3-6 frases con los hallazgos y la recomendación principal. Que se entienda todo leyendo solo esto.
-3. **Contexto / objetivo** — qué se analizó y por qué.
-4. **Hallazgos** — una sección (`##`) por tema. Usa subtítulos, tablas para cifras y citas para texto fuente relevante.
-5. **Análisis / implicaciones** — qué significan los hallazgos.
-6. **Recomendaciones** — accionables, priorizadas.
-7. **Conclusión** y, si aplica, **anexos** (datos de respaldo, fuentes).
+## Recommended structure
+1. **Cover / title** — clear title, subtitle, date, author/organization.
+2. **Executive summary** — 3-6 sentences with the findings and the main recommendation. Everything should be understandable by reading this alone.
+3. **Context / objective** — what was analyzed and why.
+4. **Findings** — one section (`##`) per topic. Use subtitles, tables for figures and quotes for relevant source text.
+5. **Analysis / implications** — what the findings mean.
+6. **Recommendations** — actionable, prioritized.
+7. **Conclusion** and, if applicable, **appendices** (supporting data, sources).
 
-## Buenas prácticas
-- Apóyate en los datos del proyecto: usa `buscar_en_documentos` y cita cifras/fechas/cláusulas concretas, no generalidades.
-- Una afirmación, una evidencia. Evita el relleno.
-- Usa tablas para comparativas y números; prosa para razonamiento.
-- Encabezados Markdown jerárquicos (`#`, `##`, `###`) para que el documento tenga navegación y, en DOCX, estilos de título reales.
-- Tono objetivo y profesional. Si hay incertidumbre, decláralo.
+## Best practices
+- Lean on the project's data: use `buscar_en_documentos` and cite specific figures/dates/clauses, not generalities.
+- One claim, one piece of evidence. Avoid filler.
+- Use tables for comparisons and numbers; prose for reasoning.
+- Hierarchical Markdown headings (`#`, `##`, `###`) so the document has navigation and, in DOCX, real heading styles.
+- Objective, professional tone. If there is uncertainty, state it.
 
-## Errores a evitar
-- No inventes datos que no estén en las fuentes.
-- No mezcles niveles de encabezado de forma incoherente.
-- Evita muros de texto: divide en secciones digeribles.
+## Mistakes to avoid
+- Do not invent data that is not in the sources.
+- Do not mix heading levels inconsistently.
+- Avoid walls of text: break into digestible sections.

@@ -14,10 +14,10 @@ class FileInfo(BaseModel):
 
 def _safe_path(filename: str):
     if "/" in filename or "\\" in filename or ".." in filename:
-        raise HTTPException(status_code=400, detail="Nombre de archivo invalido")
+        raise HTTPException(status_code=400, detail="Invalid file name")
     path = GENERATED_DIR / filename
     if not path.exists():
-        raise HTTPException(status_code=404, detail="Archivo no encontrado")
+        raise HTTPException(status_code=404, detail="File not found")
     return path
 
 
