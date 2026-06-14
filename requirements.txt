@@ -23,7 +23,7 @@ chromadb==1.5.9
 #   - Code mode (Python):     reportlab/python-docx/python-pptx/openpyxl run by the agent
 markdown==3.7            # Markdown -> HTML (rapid mode)
 weasyprint==62.3         # HTML -> PDF (rapid mode, full Unicode + CSS)
-pydyf==0.10.0            # weasyprint dep: PIN obligatorio (0.11+ rompe write_pdf con AttributeError 'transform')
+pydyf==0.10.0            # weasyprint dep: required pin (0.11+ breaks write_pdf with AttributeError 'transform')
 reportlab==4.2.5         # PDF (code mode, precise layout)
 python-pptx==1.0.2       # PPTX (code mode)
 

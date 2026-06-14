@@ -40,7 +40,7 @@ def _build_cloud(provider: str, model_name: str, temperature: float, max_tokens:
     if provider == "anthropic":
         api_key = config.get("anthropic_api_key", "")
         if not api_key:
-            raise ValueError("[Error: API key de Anthropic no configurada. Ve a Ajustes.]")
+            raise ValueError("[Error: Anthropic API key not configured. Go to Settings.]")
         from langchain_anthropic import ChatAnthropic
         return ChatAnthropic(
             model=model_name or "claude-4-5-haiku",
@@ -51,7 +51,7 @@ def _build_cloud(provider: str, model_name: str, temperature: float, max_tokens:
     if provider == "openai":
         api_key = config.get("openai_api_key", "")
         if not api_key:
-            raise ValueError("[Error: API key de OpenAI no configurada. Ve a Ajustes.]")
+            raise ValueError("[Error: OpenAI API key not configured. Go to Settings.]")
         from langchain_openai import ChatOpenAI
         return ChatOpenAI(
             model=model_name or "gpt-4o-mini",
@@ -62,7 +62,7 @@ def _build_cloud(provider: str, model_name: str, temperature: float, max_tokens:
     if provider == "google":
         api_key = config.get("google_api_key", "")
         if not api_key:
-            raise ValueError("[Error: API key de Google no configurada. Ve a Ajustes.]")
+            raise ValueError("[Error: Google API key not configured. Go to Settings.]")
         from langchain_google_genai import ChatGoogleGenerativeAI
         return ChatGoogleGenerativeAI(
             model=model_name or "gemini-2.5-flash",
@@ -70,7 +70,7 @@ def _build_cloud(provider: str, model_name: str, temperature: float, max_tokens:
             temperature=temperature,
         )
     raise ValueError(
-        f"[Error: proveedor cloud desconocido '{provider}'. Configura en Ajustes.]"
+        f"[Error: unknown cloud provider '{provider}'. Configure it in Settings.]"
     )
 
 

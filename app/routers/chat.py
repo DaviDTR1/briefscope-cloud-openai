@@ -55,7 +55,7 @@ async def chat(
         db.add(conv)
         db.commit()
         db.refresh(conv)
-        logger.debug("Nueva conversacion creada: id=%s", conv.id)
+        logger.debug("New conversation created: id=%s", conv.id)
 
     db.add(models.Message(conversation_id=conv.id, role="user", content=body.message))
     conv.updated_at = datetime.now(timezone.utc)
@@ -73,11 +73,11 @@ async def chat(
     try:
         doc_context, used_rag = build_document_context(project_id, docs, body.message)
     except Exception as exc:
-        logger.exception("Error construyendo contexto documental: %s", exc)
+        logger.exception("Error building document context: %s", exc)
         doc_context, used_rag = "", False
 
     instructions_block = (
-        f"INSTRUCCIONES DEL PROYECTO:\n{project.instructions}"
+        f"PROJECT INSTRUCTIONS:\n{project.instructions}"
         if project.instructions.strip()
         else ""
     )
@@ -165,7 +165,7 @@ def delete_conversation(project_id: int, conv_id: int, db: Session = Depends(get
         raise HTTPException(status_code=404, detail="Conversation not found")
     db.delete(conv)
     db.commit()
-    logger.info("Conversacion %s eliminada", conv_id)
+    logger.info("Conversation %s deleted", conv_id)
 
 
 async def _sse_generator(
@@ -208,23 +208,23 @@ async def _sse_generator(
                     formato  = payload.get("formato", "")
                     yield _sse("file_ready", json.dumps({"filename": filename, "formato": formato}))
                     generated_files.append(filename)
-                    logger.info("Archivo generado: %s", filename)
+                    logger.info("File generated: %s", filename)
                 except Exception as exc:
-                    logger.exception("Error procesando __file_ready__: %s", exc)
+                    logger.exception("Error processing __file_ready__: %s", exc)
                 continue
 
             full_response += chunk
             yield _sse("token", chunk)
 
     except Exception as exc:
-        logger.exception("Error en stream_chat: %s", exc)
+        logger.exception("Error in stream_chat: %s", exc)
         yield _sse("error", str(exc))
         yield _sse("done", "")
         return
 
     # Build final response text to persist
     if generated_files:
-        files_note = "\n".join(f"[Archivo generado: {f}]" for f in generated_files)
+        files_note = "\n".join(f"[Generated file: {f}]" for f in generated_files)
         full_response = (full_response + "\n" + files_note).strip()
 
     if full_response:
@@ -239,7 +239,7 @@ async def _sse_generator(
                     role="assistant",
                     content=full_response,
                 ))
-                if conv.title == "Nueva conversacion":
+                if conv.title == "New conversation":
                     conv.title = user_message[:60] + ("..." if len(user_message) > 60 else "")
                 conv.updated_at = datetime.now(timezone.utc)
                 db.commit()
