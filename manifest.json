@@ -7,8 +7,8 @@
   "healthcheck_entry_point": "/api/briefscope_cloud_openai/health",
   "version": "1.0.0",
   "logo": "logo.png",
-  "description": "Agente de análisis documental sobre los documentos que sube el usuario: búsqueda en el contenido (RAG cuando el corpus es grande, o contexto completo cuando es pequeño), resumen e investigación, y generación de archivos descargables (PDF, DOCX, XLSX, PPTX, MD, TXT). Versión CLOUD OpenAI: embeddings y LLM fijados al proveedor OpenAI (modelos GPT); requiere una API key de OpenAI.",
-  "description_en": "Document-analysis agent over the user's uploaded documents: content search (RAG for large corpora, full context for small ones), summarization and research, and generation of downloadable files (PDF, DOCX, XLSX, PPTX, MD, TXT). CLOUD OpenAI version: embeddings and LLM fixed to the OpenAI provider (GPT models); requires an OpenAI API key.",
+  "description": "Agente que analiza y genera documentos. Analiza los archivos que subes (PDF, DOCX, XLSX, TXT, MD) y genera entregables descargables (PDF, DOCX, XLSX, PPTX, MD, TXT), con búsqueda RAG sobre tu contenido. Versión CLOUD OpenAI: LLM y embeddings de OpenAI (modelos GPT); requiere una API key de OpenAI.",
+  "description_en": "Agent that analyzes and generates documents. It analyzes your uploaded files (PDF, DOCX, XLSX, TXT, MD) and generates downloadable deliverables (PDF, DOCX, XLSX, PPTX, MD, TXT), with RAG search over your content. CLOUD OpenAI version: OpenAI LLM and embeddings (GPT models); requires an OpenAI API key.",
   "author": "BriefScope",
   "license": "MIT"
 }
