@@ -1,0 +1,46 @@
+services:
+  # ── ChromaDB vector store ─────────────────────────────────────────────────
+  briefscope_chroma_openai:
+    image: chromadb/chroma:1.5.9
+    container_name: briefscope_chroma_openai
+    environment:
+      - IS_PERSISTENT=TRUE
+      - ANONYMIZED_TELEMETRY=FALSE
+    volumes:
+      - briefscope_chroma_openai_data:/data
+    networks:
+      - queai_network
+    restart: unless-stopped
+    # Chroma listens on 8000 internally — not published to host
+
+  # ── BriefScope app ────────────────────────────────────────────────────────
+  briefscope_cloud_openai:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: briefscope_cloud_openai_service
+    environment:
+      - ROOT_PATH=/api/briefscope_cloud_openai
+      - LLM_MODE=cloud
+    volumes:
+      - briefscope_cloud_openai_data:/code/data
+      - briefscope_cloud_openai_generated:/code/generated
+    networks:
+      - queai_network
+    depends_on:
+      - briefscope_chroma_openai
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.briefscope_cloud_openai.rule=PathPrefix(`/api/briefscope_cloud_openai`)"
+      - "traefik.http.routers.briefscope_cloud_openai.entrypoints=web"
+      - "traefik.http.services.briefscope_cloud_openai.loadbalancer.server.port=8080"
+
+volumes:
+  briefscope_cloud_openai_data:
+  briefscope_cloud_openai_generated:
+  briefscope_chroma_openai_data:
+
+networks:
+  queai_network:
+    external: true
