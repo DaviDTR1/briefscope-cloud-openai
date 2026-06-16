@@ -1,9 +1,13 @@
 # BriefScope — CLOUD OpenAI
 
-**Document-analysis agent for the [QueAI](https://github.com/queai-project/QueAI)
-kernel.** Upload your documents, ask questions about them, and let the agent
-research, summarize and generate downloadable deliverables — powered by OpenAI
-(GPT models + OpenAI embeddings).
+**Document-analysis agent.** Upload your documents, ask questions about them, and
+let the agent research, summarize and generate downloadable deliverables —
+powered by OpenAI (GPT models + OpenAI embeddings).
+
+> Runs **two ways**: as a plugin inside the
+> [QueAI](https://github.com/queai-project/QueAI) kernel, or fully
+> **standalone** with nothing but Docker — see
+> [Run standalone (without QueAI)](#run-standalone-without-queai).
 
 > This is the **CLOUD OpenAI** variant. The embedding provider and the LLM are
 > both fixed to OpenAI, so it requires an OpenAI API key and makes outbound
@@ -59,14 +63,46 @@ Key REST routes (all under the plugin root path `/api/briefscope_cloud_openai`):
 
 ## Requirements
 
-- A running [QueAI](https://github.com/queai-project/QueAI) kernel (Docker +
-  Docker Compose v2).
-- An **OpenAI API key**.
+- **Docker + Docker Compose v2** — that's all you need to run it.
+- An **OpenAI API key** (entered later through the Settings UI).
 - Outbound network access to the OpenAI API.
 
-## Install
+QueAI is **optional**: it's only needed if you want to run BriefScope as a
+managed plugin alongside other plugins. To run it on its own, skip straight to
+[Run standalone (without QueAI)](#run-standalone-without-queai).
 
-### As a QueAI plugin (recommended)
+## Run standalone (without QueAI)
+
+BriefScope is a self-contained FastAPI app plus a bundled ChromaDB container. It
+does not need the kernel, Traefik or any other plugin to run — only Docker.
+
+```bash
+# Build and start everything (app + ChromaDB)
+docker compose -f docker-compose.standalone.yml up -d --build
+
+# Then open the UI
+#    http://localhost:8080/ui/
+```
+
+Then open **Settings** in the UI and paste your OpenAI API key. That's it — the
+key is saved to `data/config.json` (a Docker volume) and survives restarts.
+
+`docker-compose.standalone.yml` is **self-contained**: it defines every service,
+its own private network and volumes, publishes the app on host port `8080`, and
+blanks `ROOT_PATH` so the UI, REST API and interactive docs (`/docs`) all live at
+the host root instead of behind the kernel's `/api/...` path prefix. You do
+**not** need the base `docker-compose.yml`, a second `-f` flag, or a manually
+created network. Want a different port? Edit the `8080:8080` mapping in that
+file. To stop and remove everything:
+
+```bash
+docker compose -f docker-compose.standalone.yml down
+```
+
+## Install as a QueAI plugin
+
+If you do run the [QueAI](https://github.com/queai-project/QueAI) kernel, install
+BriefScope as a plugin instead:
 
 1. Make this plugin available to your kernel (clone it into the kernel's
    `plugins/` directory, or install it from the marketplace if registered).
@@ -74,16 +110,9 @@ Key REST routes (all under the plugin root path `/api/briefscope_cloud_openai`):
 3. Find **BriefScope CLOUD OpenAI** in the catalog and install it.
 4. Open the plugin UI and go to **Settings** to enter your OpenAI API key.
 
-### Standalone (development)
-
-```bash
-docker compose up -d --build
-```
-
-This brings up the app and its bundled ChromaDB on the external
-`queai_network`. The app expects that network to exist (the kernel creates it);
-create it manually with `docker network create queai_network` if you run the
-plugin on its own.
+In this mode the kernel provides the `queai_network` and Traefik routes the app
+at `/api/briefscope_cloud_openai`; the base `docker-compose.yml` is used as-is
+(no standalone override).
 
 ## Configuration
 
@@ -91,13 +120,12 @@ No secrets live in `.env`. The OpenAI API key and runtime parameters are entered
 through the plugin **Settings** UI and persisted to `data/config.json` (which
 survives container restarts via the plugin's Docker volume).
 
-`docker-compose.yml` sets two environment variables automatically — do not
-change them:
+`docker-compose.yml` sets two environment variables automatically:
 
 | Variable | Value | Meaning |
 |---|---|---|
-| `ROOT_PATH` | `/api/briefscope_cloud_openai` | Traefik path prefix / FastAPI `root_path` |
-| `LLM_MODE` | `cloud` | Selects the cloud provider path |
+| `ROOT_PATH` | `/api/briefscope_cloud_openai` | FastAPI `root_path` / kernel path prefix. Blanked to `""` in `docker-compose.standalone.yml` so everything serves at the host root. |
+| `LLM_MODE` | `cloud` | Selects the cloud provider path. Leave as-is. |
 
 Tunable from the Settings UI:
 

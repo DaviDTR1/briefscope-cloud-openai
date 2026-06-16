@@ -1,0 +1,55 @@
+# Self-contained standalone stack — run BriefScope WITHOUT the QueAI kernel.
+#
+# Unlike docker-compose.yml (which expects the kernel's external network and
+# Traefik), this file is COMPLETE on its own: it defines every service, its own
+# private network and volumes, publishes the app port, and serves everything at
+# the host root. No `docker network create` and no second -f file are needed.
+#
+# Start:  docker compose -f docker-compose.standalone.yml up -d --build
+# Open:   http://localhost:8080/ui/
+# Stop:   docker compose -f docker-compose.standalone.yml down
+#
+# Tip: change "8080:8080" to e.g. "8090:8080" to use a different host port.
+
+services:
+  # ── ChromaDB vector store ─────────────────────────────────────────────────
+  briefscope_chroma_openai:
+    image: chromadb/chroma:1.5.9
+    container_name: briefscope_chroma_openai
+    environment:
+      - IS_PERSISTENT=TRUE
+      - ANONYMIZED_TELEMETRY=FALSE
+    volumes:
+      - briefscope_chroma_openai_data:/data
+    networks:
+      - briefscope
+    restart: unless-stopped
+
+  # ── BriefScope app ────────────────────────────────────────────────────────
+  briefscope_cloud_openai:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: briefscope_cloud_openai_service
+    environment:
+      - ROOT_PATH=        # blank → UI, API and /docs serve at the host root
+      - LLM_MODE=cloud
+    volumes:
+      - briefscope_cloud_openai_data:/code/data
+      - briefscope_cloud_openai_generated:/code/generated
+    networks:
+      - briefscope
+    depends_on:
+      - briefscope_chroma_openai
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+volumes:
+  briefscope_cloud_openai_data:
+  briefscope_cloud_openai_generated:
+  briefscope_chroma_openai_data:
+
+networks:
+  briefscope:
+    driver: bridge
