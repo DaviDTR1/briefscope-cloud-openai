@@ -12,7 +12,7 @@
 # Tip: change "8080:8080" to e.g. "8090:8080" to use a different host port.
 
 services:
-  # ── ChromaDB vector store ─────────────────────────────────────────────────
+  # ChromaDB vector store
   briefscope_chroma_openai:
     image: chromadb/chroma:1.5.9
     container_name: briefscope_chroma_openai
@@ -25,14 +25,14 @@ services:
       - briefscope
     restart: unless-stopped
 
-  # ── BriefScope app ────────────────────────────────────────────────────────
+  # BriefScope app
   briefscope_cloud_openai:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: briefscope_cloud_openai_service
     environment:
-      - ROOT_PATH=        # blank → UI, API and /docs serve at the host root
+      - "ROOT_PATH="
       - LLM_MODE=cloud
     volumes:
       - briefscope_cloud_openai_data:/code/data
