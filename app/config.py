@@ -102,6 +102,11 @@ _DEFAULTS: dict[str, Any] = {
     "max_delegations":       4,     # global cap on sub-agent calls per turn
     "agent_max_rounds":      8,     # max tool rounds inside a single agent
     "agent_max_depth":       2,     # orchestrator -> sub-agent nesting cap
+    # --- Web search (cloud only) ---
+    # Which sub-agents may use the buscar_en_web tool WHEN the per-project web
+    # search switch is ON. By default only the researcher. The user can add
+    # "creador" from Settings. An empty list disables web search for everyone.
+    "web_search_agents":     ["investigador"],
 }
 
 

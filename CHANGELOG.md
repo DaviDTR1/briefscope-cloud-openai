@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.7.4] - 2026-06-16
+
+### Added
+- **Web search for the cloud agents.** A new per-project globe toggle sits next to
+  the attachment (＋) button and turns web search on or off for a chat (cloud mode
+  only, remembered per project in the browser). When on, the permitted agents gain
+  a `buscar_en_web` tool backed by DuckDuckGo via the `ddgs` package — no extra API
+  key required. **Settings → Cloud** gains a *Web Search* section to choose which
+  agents may search (Researcher and/or Creator; default: Researcher only). The
+  button is the master per-project switch; Settings is the global per-agent
+  permission list. Off → no agent searches; on → only the permitted agents do.
+
 ## [1.7.3] - 2026-06-16
 
 ### Changed

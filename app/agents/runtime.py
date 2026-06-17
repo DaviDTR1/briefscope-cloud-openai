@@ -41,6 +41,7 @@ from app.services.llm.provider import build_llm
 
 _TOOL_LABEL = {
     "buscar_en_documentos":        "Searching information in documents",
+    "buscar_en_web":               "Searching the web",
     "consultar_guia_formato":      "Consulting format guide",
     "consultar_guia_diseno":       "Consulting design guide",
     "consultar_guia_tipo":         "Consulting type guide",
@@ -78,6 +79,29 @@ def _thinking(msg: str) -> str:
 
 def _is_marker(s: str) -> bool:
     return s.startswith('{"__thinking__"') or s.startswith('{"__file_ready__"')
+
+
+def _resolve_tool_names(
+    agent: AgentDef,
+    ctx: RunContext,
+    tools: tuple[str, ...] | None,
+    web_role: str | None,
+) -> tuple[str, ...]:
+    """Return the effective tool allow-list, injecting ``buscar_en_web`` when the
+    per-project switch is ON *and* this agent's role is in the global permission
+    list (config ``web_search_agents``, default ['investigador']).
+
+    ``web_role`` overrides the role used for the permission check (the pipeline
+    runs the orchestrator as the researcher, so it passes web_role='investigador').
+    """
+    base = tuple(tools if tools is not None else agent.tools)
+    if not ctx.web_search:
+        return base
+    role = web_role or agent.name
+    allowed = set(config.get("web_search_agents", ["investigador"]) or [])
+    if role in allowed and "buscar_en_web" not in base:
+        return base + ("buscar_en_web",)
+    return base
 
 
 def _to_lc_messages(messages: list[dict]) -> list:
@@ -150,12 +174,14 @@ async def run_agent(
     stream_text: bool,
     result_sink: list[str],
     tools: tuple[str, ...] | None = None,
+    web_role: str | None = None,
 ) -> AsyncGenerator[str, None]:
     """Run one agent's tool loop. Yields markers (always) and visible text (only
     when stream_text). Appends the agent's final text to result_sink.
 
     `tools` overrides the agent's default tool allow-list (used by the pipeline
-    fallback to run the orchestrator with search-only, no-nesting tools)."""
+    fallback to run the orchestrator with search-only, no-nesting tools).
+    `web_role` overrides the role used to check web-search permission."""
     try:
         base_llm = build_llm()
     except ValueError as exc:
@@ -164,7 +190,8 @@ async def run_agent(
         result_sink.append(str(exc))
         return
 
-    bound, executables = build_tools(tools if tools is not None else agent.tools, ctx)
+    tool_names = _resolve_tool_names(agent, ctx, tools, web_role)
+    bound, executables = build_tools(tool_names, ctx)
     llm = base_llm.bind_tools(bound) if bound else base_llm
 
     logger.info(
@@ -427,7 +454,7 @@ async def run_pipeline(messages: list[dict], ctx: RunContext) -> AsyncGenerator[
     async for ev in run_agent(
         ORCHESTRATOR, messages, ctx,
         depth=1, stream_text=not wants_doc, result_sink=sink,
-        tools=RESEARCH_TOOLS,
+        tools=RESEARCH_TOOLS, web_role="investigador",
     ):
         yield ev
 

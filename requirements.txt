@@ -35,5 +35,8 @@ langchain-anthropic==1.4.6
 langchain-openai==1.3.0
 langchain-google-genai==4.2.5
 
+# Web search (cloud variants only — provider-agnostic DuckDuckGo tool)
+ddgs==9.14.4
+
 # Utilities
 pydantic-settings==2.6.1
