@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.6] - 2026-06-19
+
+### Changed
+- **Version aligned with the local variants.** No functional change for the cloud
+  variant; the version is bumped to keep the BriefScope variant family in lockstep
+  with the local CPU/GPU migration to Ollama-computed embeddings.
+
 ## [1.7.5] - 2026-06-19
 
 ### Changed
