@@ -20,7 +20,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="BriefScope CLOUD OpenAI",
     description="Intelligent document agent with RAG, tool calling and file generation.",
-    version="1.7.4",
+    version="1.7.5",
     root_path=os.getenv("ROOT_PATH", "/api/briefscope_cloud_openai"),
     lifespan=lifespan,
 )

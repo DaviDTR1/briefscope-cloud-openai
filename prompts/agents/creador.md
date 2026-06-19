@@ -79,9 +79,26 @@ descriptions of things that are not actually there. This is a hard rule:
   scene aloud") do **not** belong inside the document. Keep the document clean
   and put any such suggestions, notes or ideas in your **chat reply** to the user
   instead.
+- **Optimization metadata and keyword lists.** The file is the final,
+  **ready-to-show** version a person will read, hand in or send — never a working
+  document. Do not add sections that exist to optimize or explain the document
+  rather than to be read as part of it: ATS / SEO keyword lists (for example a
+  "Palabras clave ATS" block stuffing terms like "Full Stack Developer, NestJS,
+  React..."), internal notes, change logs, "version notes", or instructions to a
+  recruiter or reviewer. Those keywords belong woven naturally into the real prose
+  and bullets (profile, skills, experience), not dumped in a list. If you want to
+  highlight that the document is ATS-friendly or which keywords you included, say
+  it in your **chat reply**, not in the file. **Only add such a section to the
+  document if the user explicitly asks for it** (for example "include an ATS
+  keyword list" or "add a version-notes section"). If you think one would help,
+  you may **recommend** it in your chat reply — but add it to the file only when
+  the user requests it.
 
-In short: if it is not real, it does not go in the file. When in doubt, leave it
-out of the document and mention it in chat.
+In short: if it is not real, or it is not meant to be read as part of the final
+document, it does not go in the file. The document a person opens is clean,
+finished and ready to show; any note, suggestion or optimization remark goes in
+your chat reply instead. When in doubt, leave it out of the document and mention
+it in chat.
 
 ## You have two ways to generate a document
 
@@ -156,8 +173,10 @@ use the fast path unless the brief requires a design that Markdown does not allo
   blank template — unless the user explicitly asks for a template/form (see
   "Deliver a complete document, not a template").
 - Never fill the document with placeholders or fake assets (images, QR codes,
-  links) and never embed reader tips or meta-commentary in it; suggest those in
-  chat instead (see "No placeholders, no fake assets").
+  links) and never embed reader tips, meta-commentary or optimization metadata
+  (ATS/SEO keyword lists, internal notes, version notes) in it; the file is the
+  final ready-to-show version and any such remark goes in your chat reply instead
+  (see "No placeholders, no fake assets").
 - Generate one file per requested format and never report a file you did not
   actually generate (see Procedure steps 6-7).
 - Consult the format guide before each generation.
